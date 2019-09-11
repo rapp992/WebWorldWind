@@ -30,6 +30,8 @@
     "build/dist/worldwind.min.js"
   ],
   "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "^7.5.2",
+    "babel-loader": "^8.0.6",
     "grunt": "^1.0.4",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
@@ -45,7 +47,9 @@
     "karma-junit-reporter": "^1.2.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-requirejs": "^1.1.0",
-    "recursive-readdir": "^2.2.2"
+    "recursive-readdir": "^2.2.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
   },
   "keywords": [
     "sdk",
