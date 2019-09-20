@@ -6,7 +6,7 @@ module.exports = {
     entry: "./src/WorldWind.js",
     devtool: "source-map",
     output: {
-        path: path.join(__dirname, '../src/mapengine/worldwind'),
+        path: path.join(__dirname, './build'),
         filename: 'worldwind.min.js',
     },
     plugins: [
