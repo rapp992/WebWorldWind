@@ -14,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+ const webpackConfig = require('./webpack.config');
+
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -30,32 +33,8 @@ module.exports = function (grunt) {
             }
         },
 
-        requirejs: {
-            compile: {
-                options: {
-                    baseUrl: 'src',
-                    name: '../tools/almond',
-                    include: ['WorldWind'],
-                    out: 'build/dist/worldwind.min.js',
-                    wrap: {
-                        startFile: 'tools/wrap.start',
-                        endFile: 'tools/wrap.end'
-                    }
-                }
-            },
-            compileDebug: {
-                options: {
-                    baseUrl: 'src',
-                    name: '../tools/almond',
-                    include: ['WorldWind'],
-                    optimize: 'none',
-                    out: 'build/dist/worldwind.js',
-                    wrap: {
-                        startFile: 'tools/wrap.start',
-                        endFile: 'tools/wrap.end'
-                    }
-                }
-            },
+        webpack: {
+            myConfig: webpackConfig,
         },
 
         karma: {
@@ -117,10 +96,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-zip');
+    grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('default', ['clean', 'karma', 'jsdoc', 'requirejs', 'copy', 'zip']);
+    grunt.registerTask('default', ['clean', 'karma', 'jsdoc', 'webpack', 'copy', 'zip']);
 };
