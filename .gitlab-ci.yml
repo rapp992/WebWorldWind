@@ -1,0 +1,16 @@
+stages:
+ - test
+
+image: 
+  name: node:latest
+
+before_script:
+  - npm prune
+  - npm install
+  - npm install phantomjs-prebuilt
+
+test:
+  stage: test
+
+  script:
+    - npm run test
