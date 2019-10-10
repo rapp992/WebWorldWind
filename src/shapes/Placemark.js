@@ -280,6 +280,8 @@ define([
             this.depthOffset = -0.003;
         };
 
+        var PLACEMARK_LABEL_SHIFT = -5;
+
         // Internal use only. Intentionally not documented.
         Placemark.screenPoint = new Vec3(0, 0, 0); // scratch variable
         Placemark.matrix = Matrix.fromIdentity(); // scratch variable
@@ -448,22 +450,24 @@ define([
             var visibilityScale = this.eyeDistanceScaling ?
                 Math.max(0.0, Math.min(1, this.eyeDistanceScalingThreshold / this.eyeDistance)) : 1;
 
+            var imageWidth = undefined;
+            var imageHeight = undefined; // to be defined if activeTexture is defined
             // Compute the placemark's transform matrix and texture coordinate matrix according to its screen point, image size,
             // image offset and image scale. The image offset is defined with its origin at the image's bottom-left corner and
             // axes that extend up and to the right from the origin point. When the placemark has no active texture the image
             // scale defines the image size and no other scaling is applied.
             if (this.activeTexture) {
-                w = this.activeTexture.originalImageWidth;
-                h = this.activeTexture.originalImageHeight;
+                imageWidth = this.activeTexture.originalImageWidth;
+                imageHeight = this.activeTexture.originalImageHeight;
                 s = this.activeAttributes.imageScale * visibilityScale;
-                offset = this.activeAttributes.imageOffset.offsetForSize(w, h);
+                offset = this.activeAttributes.imageOffset.offsetForSize(imageWidth, imageHeight);
 
                 this.imageTransform.setTranslation(
                     Placemark.screenPoint[0] - offset[0] * s,
                     Placemark.screenPoint[1] - offset[1] * s,
                     Placemark.screenPoint[2]);
 
-                this.imageTransform.setScale(w * s, h * s, 1);
+                this.imageTransform.setScale(imageWidth * s, imageHeight * s, 1);
             } else {
                 s = this.activeAttributes.imageScale * visibilityScale;
                 offset = this.activeAttributes.imageOffset.offsetForSize(s, s);
@@ -479,7 +483,6 @@ define([
             this.imageBounds = WWMath.boundingRectForUnitQuad(this.imageTransform);
 
             // If there's a label, perform these same operations for the label texture.
-
             if (this.mustDrawLabel()) {
 
                 this.labelTexture = dc.createTextTexture(this.label, this.activeAttributes.labelAttributes);
@@ -487,7 +490,15 @@ define([
                 w = this.labelTexture.imageWidth;
                 h = this.labelTexture.imageHeight;
                 s = this.activeAttributes.labelAttributes.scale * visibilityScale;
-                offset = this.activeAttributes.labelAttributes.offset.offsetForSize(w, h);
+
+                // shift label to right of placemark by 5 pixels
+                if (this.activeAttributes) {
+                    var placemarkXOffset = (imageWidth * -1) + PLACEMARK_LABEL_SHIFT;
+                    offset = this.activeAttributes.imageOffset.offsetForSize(placemarkXOffset, imageHeight);
+                }
+                else {
+                    offset = this.activeAttributes.imageOffset.offsetForSize(w, h);
+                }
 
                 this.labelTransform.setTranslation(
                     Placemark.screenPoint[0] - offset[0] * s,

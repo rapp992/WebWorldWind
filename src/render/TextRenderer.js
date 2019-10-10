@@ -167,14 +167,6 @@ define([
             ctx2D.lineCap = "round";
             ctx2D.lineJoin = "round";
 
-            if (this.typeFace.horizontalAlignment === "left") {
-                ctx2D.translate(strokeOffset, 0);
-            } else if (this.typeFace.horizontalAlignment === "right") {
-                ctx2D.translate(textSize[0] - strokeOffset, 0);
-            } else {
-                ctx2D.translate(textSize[0] / 2, 0);
-            }
-
             for (var i = 0; i < lines.length; i++) {
                 ctx2D.translate(0, this.typeFace.size * (1 + this.lineSpacing) + strokeOffset);
                 if (this.enableOutline) {
