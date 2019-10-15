@@ -37,15 +37,16 @@ define([
          * in which case the new instance contains default attributes.
          */
         var TextAttributes = function (attributes) {
-            this._color = attributes ? attributes._color : Color.WHITE.clone();
-            this._font = attributes ? attributes._font : new Font(16);
-            this._offset = attributes ? attributes._offset
+            attributes = attributes || {};
+            this._color = attributes._color ? attributes._color : Color.WHITE.clone();
+            this._font = attributes._font ? attributes._font : new Font(16);
+            this._offset = attributes._offset ? attributes._offset
                 : new Offset(WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 0.0);
-            this._scale = attributes ? attributes._scale : 1;
-            this._depthTest = attributes ? attributes._depthTest : false;
+            this._scale = attributes._scale ? attributes._scale : 1;
+            this._depthTest = attributes._depthTest ? attributes._depthTest : false;
             this._enableOutline = attributes ? attributes._enableOutline : true;
-            this._outlineWidth = attributes ? attributes._outlineWidth : 4;
-            this._outlineColor = attributes ? attributes._outlineColor : new Color(0, 0, 0, 0);
+            this._outlineWidth = attributes._outlineWidth ? attributes._outlineWidth : 4;
+            this._outlineColor = attributes._outlineColor ? attributes._outlineColor : new Color(0, 0, 0, 0);
 
             /**
              * Indicates whether this object's state key is invalid. Subclasses must set this value to true when their
@@ -65,27 +66,14 @@ define([
          * @protected
          */
         TextAttributes.prototype.computeStateKey = function () {
-            // prevent reading any undefined and provide default value from constructor
-            if (this._color) {
-                return "c " + this._color.toHexString(true) +
-                    " f " + this._font.toString() +
-                    " o " + this._offset.toString() +
-                    " s " + this._scale +
-                    " dt " + this._depthTest +
-                    " eo " + this._enableOutline +
-                    " ow " + this._outlineWidth +
-                    " oc " + this._outlineColor.toHexString(true);
-            }
-            else {
-                return "c " + Color.WHITE.clone().toHexString(true) +
-                    " f " + this._font.toString() +
-                    " o " + this._offset.toString() +
-                    " s " + this._scale +
-                    " dt " + this._depthTest +
-                    " eo " + this._enableOutline +
-                    " ow " + this._outlineWidth +
-                    " oc " + this._outlineColor.toHexString(true);
-            }
+            return "c " + this._color.toHexString(true) +
+                " f " + this._font.toString() +
+                " o " + this._offset.toString() +
+                " s " + this._scale +
+                " dt " + this._depthTest +
+                " eo " + this._enableOutline +
+                " ow " + this._outlineWidth +
+                " oc " + this._outlineColor.toHexString(true);
         };
 
         Object.defineProperties(TextAttributes.prototype, {
