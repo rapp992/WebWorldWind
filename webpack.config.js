@@ -8,6 +8,8 @@ module.exports = {
     output: {
         path: path.join(__dirname, './build'),
         filename: 'worldwind.min.js',
+        library: 'WorldWind',
+        libraryTarget: 'var'
     },
     plugins: [
         new webpack.IgnorePlugin(/vertx/),
