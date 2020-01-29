@@ -50,7 +50,7 @@ define([
               SurfacePolygon,
               Vec2,
               Vec3,
-              libtessDummy) {
+              libtess) {
         "use strict";
 
         /**
