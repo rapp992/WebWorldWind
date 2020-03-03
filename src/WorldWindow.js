@@ -70,7 +70,8 @@ define([
         "use strict";
 
         /**
-         * Constructs a WorldWind window for an HTML canvas.
+         * Constructs a WorldWind window for an HTML canvas. A worldWindowController must be assigned after creation.
+         * The user must also call animationFrameLoop() before the WorldWindow can be used.
          * @alias WorldWindow
          * @constructor
          * @classdesc Represents a WorldWind window for an HTML canvas.
@@ -173,13 +174,6 @@ define([
              * @default [LookAtNavigator]{@link LookAtNavigator}
              */
             this.navigator = new LookAtNavigator();
-
-            /**
-             * The controller used to manipulate the globe.
-             * @type {WorldWindowController}
-             * @default [BasicWorldWindowController]{@link BasicWorldWindowController}
-             */
-            this.worldWindowController = new BasicWorldWindowController(this);
 
             /**
              * The vertical exaggeration to apply to the terrain.
@@ -309,9 +303,6 @@ define([
 
             this.canvas.addEventListener(WorldWind.REDRAW_EVENT_TYPE, handleRedrawEvent, false);
             window.addEventListener(WorldWind.REDRAW_EVENT_TYPE, handleRedrawEvent, false);
-
-            // Render to the WebGL context in an animation frame loop until the WebGL context is lost.
-            this.animationFrameLoop();
         };
 
         Object.defineProperties(WorldWindow.prototype, {
