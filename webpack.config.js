@@ -28,6 +28,16 @@ module.exports = {
                     }
                 ]
             },
+            { // Rule to convert images to inline
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8000,
+                        name: 'images/[hash]-[name].[ext]'
+                    }
+                }]
+            }
         ]
     }
 }

@@ -49,6 +49,7 @@
     "karma-requirejs": "^1.1.0",
     "recursive-readdir": "^2.2.2",
     "requirejs": "^2.3.6",
+    "url-loader": "^4.1.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.10"
   },
