@@ -25,19 +25,7 @@ define([
         '../util/Logger',
         '../util/Offset',
         '../shapes/ScreenImage',
-        '../geom/Vec2',
-        '../../images/view/view-elevation-down-32x32.png',
-        '../../images/view/view-elevation-up-32x32.png',
-        '../../images/view/view-fov-narrow-32x32.png',
-        '../../images/view/view-fov-wide-32x32.png',
-        '../../images/view/view-heading-left-32x32.png',
-        '../../images/view/view-heading-right-32x32.png',
-        '../../images/view/view-look-64x64.png',
-        '../../images/view/view-pan-64x64.png',
-        '../../images/view/view-pitch-down-32x32.png',
-        '../../images/view/view-pitch-up-32x32.png',
-        '../../images/view/view-zoom-in-32x32.png',
-        '../../images/view/view-zoom-out-32x32.png'
+        '../geom/Vec2'
     ],
     function (Angle,
               ArgumentError,
@@ -46,19 +34,7 @@ define([
               Logger,
               Offset,
               ScreenImage,
-              Vec2,
-              ElevationUpImage,
-              ElevationDownImage,
-              FovNarrowImage,
-              FovWideImage,
-              HeadingLeftImage,
-              HeadingRightImage,
-              LookImage,
-              PanImage,
-              PitchDownImage,
-              PitchUpImage,
-              ZoomInImage,
-              ZoomOutImage) {
+              Vec2) {
         "use strict";
 
         /**
@@ -195,17 +171,17 @@ define([
                 imagePath = WorldWind.configuration.baseUrl + "images/view/";
 
             // These controls are all internal and intentionally not documented.
-            this.panControl = new ScreenImage(screenOffset.clone(), PanImage);
-            this.zoomInControl = new ScreenImage(screenOffset.clone(), ZoomInImage);
-            this.zoomOutControl = new ScreenImage(screenOffset.clone(), ZoomOutImage);
-            this.headingLeftControl = new ScreenImage(screenOffset.clone(), HeadingLeftImage);
-            this.headingRightControl = new ScreenImage(screenOffset.clone(), HeadingRightImage);
-            this.tiltUpControl = new ScreenImage(screenOffset.clone(), PitchUpImage);
-            this.tiltDownControl = new ScreenImage(screenOffset.clone(), PitchDownImage);
-            this.exaggerationUpControl = new ScreenImage(screenOffset.clone(), ElevationUpImage);
-            this.exaggerationDownControl = new ScreenImage(screenOffset.clone(), ElevationDownImage);
-            this.fovNarrowControl = new ScreenImage(screenOffset.clone(), FovNarrowImage);
-            this.fovWideControl = new ScreenImage(screenOffset.clone(), FovWideImage);
+            this.panControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pan-64x64.png");
+            this.zoomInControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-in-32x32.png");
+            this.zoomOutControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-out-32x32.png");
+            this.headingLeftControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-left-32x32.png");
+            this.headingRightControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-right-32x32.png");
+            this.tiltUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-up-32x32.png");
+            this.tiltDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-down-32x32.png");
+            this.exaggerationUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-up-32x32.png");
+            this.exaggerationDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-down-32x32.png");
+            this.fovNarrowControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-narrow-32x32.png");
+            this.fovWideControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-wide-32x32.png");
 
             // Disable the FOV controls by default.
             this.fovNarrowControl.enabled = false;
