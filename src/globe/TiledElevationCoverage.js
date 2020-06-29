@@ -643,7 +643,7 @@ define(['../util/AbsentResourceList',
             var elevationImage = new ElevationImage(tile.sector, tile.tileWidth, tile.tileHeight),
                 geoTiff;
 
-            if (this.retrievalImageFormat === "application/bil16") {
+            if (this.retrievalImageFormat === "application/bil16" || this.retrievalImageFormat === "image/bil") {
                 elevationImage.imageData = new Int16Array(xhr.response);
                 elevationImage.size = elevationImage.imageData.length * 2;
             } else if (this.retrievalImageFormat === "application/bil32") {
