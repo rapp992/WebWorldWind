@@ -643,7 +643,17 @@ define(['../util/AbsentResourceList',
             var elevationImage = new ElevationImage(tile.sector, tile.tileWidth, tile.tileHeight),
                 geoTiff;
 
-            if (this.retrievalImageFormat === "application/bil16" || this.retrievalImageFormat === "image/bil") {
+            if (this.retrievalImageFormat === "image/bil") {
+                elevationImage.imageData = new Int16Array(xhr.response);
+                // This is a hack to zero out bad elevation data it needs to be removed asap
+                // https://gitlab.com/GitLabRGI/missioncommand/emp3-web/-/issues/193
+                for (let i = 0; i < elevationImage.imageData.length; i++) {
+                    if (elevationImage.imageData[i] === 32767) {
+                        elevationImage.imageData[i] = 0;
+                    }
+                }
+                elevationImage.size = elevationImage.imageData.length * 2;
+            } else if (this.retrievalImageFormat === "application/bil16") {
                 elevationImage.imageData = new Int16Array(xhr.response);
                 elevationImage.size = elevationImage.imageData.length * 2;
             } else if (this.retrievalImageFormat === "application/bil32") {
