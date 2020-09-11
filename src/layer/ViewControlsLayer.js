@@ -183,6 +183,10 @@ define([
             this.fovNarrowControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-narrow-32x32.png");
             this.fovWideControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-wide-32x32.png");
 
+            //Custom symbols for the EMP3
+            this.drawCancelControl = new ScreenImage(screenOffset.clone(), imagePath + "view-drawing-32x32.png");
+            this.switchPanControl = new ScreenImage(screenOffset.clone(), imagePath + "switch-pan-32x32.png");
+
             // Disable the FOV controls by default.
             this.fovNarrowControl.enabled = false;
             this.fovWideControl.enabled = false;
@@ -198,6 +202,8 @@ define([
                 this.tiltDownControl,
                 this.exaggerationUpControl,
                 this.exaggerationDownControl,
+                this.drawCancelControl,
+                this.switchPanControl,
                 this.fovNarrowControl,
                 this.fovWideControl
             ];
@@ -258,22 +264,6 @@ define([
             },
 
             /**
-             * Indicates whether to display the heading control.
-             * @type {Boolean}
-             * @default true
-             * @memberof ViewControlsLayer.prototype
-             */
-            showHeadingControl: {
-                get: function () {
-                    return this.headingLeftControl.enabled;
-                },
-                set: function (value) {
-                    this.headingLeftControl.enabled = value;
-                    this.headingRightControl.enabled = value;
-                }
-            },
-
-            /**
              * Indicates whether to display the tilt control.
              * @type {Boolean}
              * @default true
@@ -320,6 +310,23 @@ define([
                     this.fovWideControl.enabled = value;
                 }
             },
+
+            /**
+             * Indicates whether to display the custom EMP3 Controls control.
+             * @type {Boolean}
+             * @default true
+             * @memberof ViewControlsLayer.prototype
+             */
+            showCustomControl: {
+                get: function () {
+                    return this.drawCancelControl.enabled;
+                },
+                set: function (value) {
+                    this.drawCancelControl.enabled = value;
+                    this.switchPanControl.enabled = value;
+                }
+            },
+
 
             /**
              * The opacity of the controls when they are not in use. The opacity should be a value between 0 and 1,
@@ -393,6 +400,10 @@ define([
                 controlPanelWidth += this.fovNarrowControl.size;
                 this.inCurrentFrame = true;
             }
+            if (this.showCustomControl) {
+                controlPanelWidth += this.switchPanControl.size;
+                this.inCurrentFrame= true;
+            }
 
             // Determine the lower-left corner position of the control collection.
             screenOffset = this.placement.offsetForSize(dc.viewport.width,
@@ -459,6 +470,15 @@ define([
                 this.fovWideControl.screenOffset.y = y + this.fovNarrowControl.size;
                 this.fovNarrowControl.render(dc);
                 this.fovWideControl.render(dc);
+            }
+
+            if (this.showCustomControl) {
+                this.drawCancelControl.screenOffset.x = x;
+                this.drawCancelControl.screenOffset.y = y;
+                this.switchPanControl.screenOffset.x = x;
+                this.switchPanControl.screenOffset.y = y + this.drawCancelControl.size;
+                this.drawCancelControl.render(dc);
+                this.switchPanControl.render(dc);
             }
         };
 
@@ -639,7 +659,10 @@ define([
                 } else if (topObject === this.fovNarrowControl
                     || topObject === this.fovWideControl) {
                     operation = this.handleFov;
-                }
+                } else if (topObject === this.drawCancelControl
+                    || topObject === this.switchPanControl) {
+                        operation = this.handleCustom;
+                    }
             }
 
             return operation;
@@ -906,6 +929,43 @@ define([
                 this.highlightedControl = null;
             }
         };
+
+        // Intentionally not documented.
+        ViewControlsLayer.prototype.handleCustom = function (e, control) {
+            var handled = false;
+
+            // Start an operation on left button down or touch start.
+            if (this.isPointerDown(e) || this.isTouchStart(e)) {
+                this.activeControl = control;
+                this.activeOperation = this.handleFov;
+                e.preventDefault();
+
+                if (this.isTouchStart(e)) {
+                    this.currentTouchId = e.changedTouches.item(0).identifier; // capture the touch identifier
+                }
+
+                // This function is called by the timer to perform the operation.
+                var thisLayer = this; // capture 'this' for use in the function
+                //var setRange = function () {
+                if (thisLayer.activeControl) {
+                    if (thisLayer.activeControl === thisLayer.switchPanControl) {
+                        //Mode 5 is unlocked state, Mode 1 is No Pan State
+                        thisLayer.wwd.worldWindowController.lockState = 
+                            thisLayer.wwd.worldWindowController.lockState.mode === 5 ? {mode: 1} : {mode: 5};
+                    } else if (thisLayer.activeControl === thisLayer.drawCancelControl) {
+                        thisLayer.wwd.EMP3APIMap.cancelDraw();
+                    }
+                    thisLayer.wwd.redraw();
+                    //setTimeout(setRange, 50);
+                }
+                //};
+                //setTimeout(setRange, 50);
+                handled = true;
+            }
+
+            return handled;
+        };
+
 
         return ViewControlsLayer;
     });
