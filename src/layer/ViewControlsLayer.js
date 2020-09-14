@@ -248,6 +248,23 @@ define([
             },
 
             /**
+             * Indicates whether to display the heading control.
+             * @type {Boolean}
+             * @default true
+             * @memberof ViewControlsLayer.prototype
+             */
+            showHeadingControl: {
+                get: function () {
+                    return this.headingLeftControl.enabled;
+                },
+                set: function (value) {
+                    this.headingLeftControl.enabled = value;
+                    this.headingRightControl.enabled = value;
+                }
+            },
+
+
+            /**
              * Indicates whether to display the zoom control.
              * @type {Boolean}
              * @default true
