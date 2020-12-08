@@ -57,9 +57,10 @@ define([
          * @param {String|ImageSource} imageSource The source of the image to display.
          * May be either a string identifying the URL of the image, or an {@link ImageSource} object identifying a
          * dynamically created image.
+         * @param {String|toolTipText} toolTipText description of the function of the button
          * @throws {ArgumentError} If the specified screen offset or image source is null or undefined.
          */
-        var ScreenImage = function (screenOffset, imageSource) {
+        var ScreenImage = function (screenOffset, imageSource, toolTipText) {
             if (!screenOffset) {
                 throw new ArgumentError(
                     Logger.logMessage(Logger.LEVEL_SEVERE, "ScreenImage", "constructor", "missingOffset"));
@@ -81,6 +82,9 @@ define([
             // Documented with its property accessor below.
             this._imageSource = imageSource;
 
+            // The tooltip associated with the ScreenImage
+            this.toolTipText = toolTipText;
+             
             /**
              * The image color. When displayed, this shape's image is multiplied by this image color to achieve the
              * final image color. The color white, the default, causes the image to be drawn in its native colors.
@@ -382,6 +386,31 @@ define([
                 // Draw the placemark's image quad.
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
             }
+        };
+        //Render Tooltip on mouse over 
+        ScreenImage.displayToolTip = function (control) {
+
+        };
+
+        //Render Tooltip on mouse over 
+        ScreenImage.displayToolTip = function (control) {
+            var parentMap = document.getElementsByClassName('map');
+            this.tipCanvas = document.createElement("canvas");
+            var tipCtx = this.tipCanvas.getContext('2d');
+            tipCtx.font ="20px monospace";
+            tipCtx.fillStyle ="white";
+            tipCtx.stroke = "black";
+            tipCtx.fillText(control.toolTipText, 0, this.tipCanvas.height - 5);
+            this.tipCanvas.style.bottom = control.screenOffset['y'] + control.size + 'px';
+            this.tipCanvas.style.left = control.screenOffset['x'] + control.size + 'px';
+            this.tipCanvas.style.zIndex = '99999';
+            this.tipCanvas.style.position ="absolute";
+            parentMap[0].append(this.tipCanvas);
+        };
+
+        //Remove tooltip on mouseoff
+        ScreenImage.removeToolTip = function(){
+            this.tipCanvas.remove()
         };
 
         return ScreenImage;

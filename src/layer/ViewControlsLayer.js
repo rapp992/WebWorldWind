@@ -171,22 +171,21 @@ define([
                 imagePath = WorldWind.configuration.baseUrl + "images/view/";
 
             // These controls are all internal and intentionally not documented.
-            this.panControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pan-64x64.png");
-            this.zoomInControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-in-32x32.png");
-            this.zoomOutControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-out-32x32.png");
-            this.headingLeftControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-left-32x32.png");
-            this.headingRightControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-right-32x32.png");
-            this.tiltUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-up-32x32.png");
-            this.tiltDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-down-32x32.png");
-            this.exaggerationUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-up-32x32.png");
-            this.exaggerationDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-down-32x32.png");
-            this.fovNarrowControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-narrow-32x32.png");
-            this.fovWideControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-wide-32x32.png");
+            this.panControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pan-64x64.png", "Pan Image");
+            this.zoomInControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-in-32x32.png", "Zoom into map");
+            this.zoomOutControl = new ScreenImage(screenOffset.clone(), imagePath + "view-zoom-out-32x32.png", "Zoom out of map");
+            this.headingLeftControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-left-32x32.png", "Navigate left");
+            this.headingRightControl = new ScreenImage(screenOffset.clone(), imagePath + "view-heading-right-32x32.png", "Navigate right");
+            this.tiltUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-up-32x32.png", "Tilt Up");
+            this.tiltDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-pitch-down-32x32.png", "Tilt Down");
+            this.exaggerationUpControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-up-32x32.png", "Large Up Control");
+            this.exaggerationDownControl = new ScreenImage(screenOffset.clone(), imagePath + "view-elevation-down-32x32.png", "Large down Control");
+            this.fovNarrowControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-narrow-32x32.png", "Smaller Field Of View");
+            this.fovWideControl = new ScreenImage(screenOffset.clone(), imagePath + "view-fov-wide-32x32.png", "Larger Field Of View");
 
             //Custom symbols for the EMP3
-            this.drawCancelControl = new ScreenImage(screenOffset.clone(), imagePath + "view-drawing-32x32.png");
-            this.switchPanControl = new ScreenImage(screenOffset.clone(), imagePath + "switch-pan-32x32.png");
-
+            this.drawCancelControl = new ScreenImage(screenOffset.clone(), imagePath + "view-drawing-32x32.png", "Cancel Draw");
+            this.switchPanControl = new ScreenImage(screenOffset.clone(), imagePath + "switch-pan-32x32.png", "Switch Pan");
             // Disable the FOV controls by default.
             this.fovNarrowControl.enabled = false;
             this.fovWideControl.enabled = false;
@@ -942,8 +941,10 @@ define([
 
             if (tf) {
                 this.highlightedControl = control;
+                ScreenImage.displayToolTip(control);
             } else {
                 this.highlightedControl = null;
+                ScreenImage.removeToolTip();
             }
         };
 
